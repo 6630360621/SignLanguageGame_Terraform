@@ -9,3 +9,9 @@ variable "db_password" {
   type        = string
   sensitive   = true
 }
+
+variable "image_tag" {
+  description = "ECR image tag to deploy"
+  type        = string
+  default     = "latest"
+}

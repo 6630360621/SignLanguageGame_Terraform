@@ -2,3 +2,4 @@
 
 aws_region  = "us-east-1"
 db_password = "ChangeMe123!"
+image_tag   = "latest"
