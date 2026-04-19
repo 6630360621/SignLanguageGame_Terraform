@@ -10,8 +10,8 @@ variable "db_password" {
   sensitive   = true
 }
 
-variable "image_tag" {
-  description = "ECR image tag to deploy"
+variable "image_uri" {
+  description = "Full container image URI to deploy"
   type        = string
-  default     = "latest"
+  default     = "699938055022.dkr.ecr.us-east-1.amazonaws.com/my-leaderboard-backend:latest"
 }

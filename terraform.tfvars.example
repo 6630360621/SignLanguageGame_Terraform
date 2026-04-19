@@ -2,4 +2,4 @@
 
 aws_region  = "us-east-1"
 db_password = "ChangeMe123!"
-image_tag   = "latest"
+image_uri   = "699938055022.dkr.ecr.us-east-1.amazonaws.com/my-leaderboard-backend:latest"

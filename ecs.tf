@@ -1,9 +1,3 @@
-resource "aws_ecr_repository" "app_repo" {
-  name                 = "my-leaderboard-backend"
-  image_tag_mutability = "MUTABLE"
-  force_delete         = true # Useful for testing
-}
-
 resource "aws_cloudwatch_log_group" "app" {
   name              = "/ecs/leaderboard-backend"
   retention_in_days = 7
@@ -100,7 +94,7 @@ resource "aws_ecs_task_definition" "app_task" {
   container_definitions = jsonencode([
     {
       name      = "backend"
-      image     = "${aws_ecr_repository.app_repo.repository_url}:${var.image_tag}"
+      image     = var.image_uri
       essential = true
       portMappings = [{ containerPort = 8000, hostPort = 8000 }]
       # Database connection details passed as Env Vars
