@@ -1,0 +1,4 @@
+# Copy this file to terraform.tfvars and set your real values.
+
+aws_region  = "us-east-1"
+db_password = "ChangeMe123!"
