@@ -13,59 +13,35 @@ variable "db_password" {
 variable "image_uri" {
   description = "Full container image URI to deploy"
   type        = string
-  default     = "699938055022.dkr.ecr.us-east-1.amazonaws.com/my-leaderboard-backend:latest"
-}
+  variable "amplify_app_name" {
+    description = "AWS Amplify app name for the frontend"
 
-variable "project_name" {
+    default     = "deaf-lingo-frontend"
   description = "Project name prefix for AWS resources"
   type        = string
-  default     = "leaderboard"
-}
+  variable "amplify_repository" {
+    description = "Git repository URL for Amplify hosting"
 
-variable "frontend_instance_type" {
   description = "EC2 instance type for frontend hosting"
   type        = string
-  default     = "t3.micro"
-}
+  variable "amplify_access_token" {
+    description = "GitHub personal access token for Amplify to access the repository"
 
-variable "frontend_ssh_cidr" {
-  description = "CIDR allowed to SSH into the frontend EC2 instance"
-  type        = string
-  default     = "0.0.0.0/0"
-}
+    sensitive   = true
+  }
 
-variable "frontend_enable_ssh" {
-  description = "Whether to allow SSH (22) to frontend EC2"
-  type        = bool
-  default     = true
-}
+  variable "amplify_branch_name" {
+    description = "Git branch Amplify should deploy"
+    type        = string
+    default     = "main"
+  }
 
+  variable "amplify_app_root" {
+    description = "Monorepo path to the frontend app root"
+    type        = string
+    default     = "Cloud-Sign-language/frontend"
 variable "frontend_existing_key_name" {
   description = "Existing EC2 key pair name for SSH. Leave empty to skip key pair attachment unless frontend_ssh_public_key is provided"
-  type        = string
-  default     = ""
-}
-
-variable "frontend_ssh_public_key" {
-  description = "Optional SSH public key material to create a new EC2 key pair"
-  type        = string
-  default     = ""
-}
-
-variable "frontend_artifact_bucket_name" {
-  description = "Optional existing or desired S3 bucket name for frontend artifacts. Leave empty to auto-generate"
-  type        = string
-  default     = ""
-}
-
-variable "frontend_artifact_object_key" {
-  description = "S3 object key for the frontend zip artifact"
-  type        = string
-  default     = "frontend/latest.zip"
-}
-
-variable "frontend_artifact_bucket_force_destroy" {
-  description = "Allow deleting non-empty artifact bucket on terraform destroy"
   type        = bool
   default     = false
 }

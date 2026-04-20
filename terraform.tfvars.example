@@ -6,21 +6,13 @@ image_uri   = "the link"
 
 project_name = "deaf-lingo"
 
-# Frontend EC2
-frontend_instance_type    = "t3.micro"
-frontend_enable_ssh       = false
-frontend_ssh_cidr         = "YOUR.PUBLIC.IP.ADDRESS/32"
-frontend_existing_key_name = ""
-frontend_ssh_public_key    = ""
-
-# Frontend artifact deploy (S3 -> EC2)
-frontend_artifact_bucket_name          = ""
-frontend_artifact_object_key           = "frontend/latest.zip"
-frontend_artifact_bucket_force_destroy = false
-frontend_auto_deploy_on_boot           = false
+# Amplify frontend hosting
+amplify_app_name    = "deaf-lingo-frontend"
+amplify_repository  = "https://github.com/<your-org>/<your-repo>"
+amplify_access_token = "github_pat_or_personal_access_token"
+amplify_branch_name = "main"
+amplify_app_root    = "Cloud-Sign-language/frontend"
 
 # Cognito
 cognito_user_pool_name = "deaf-lingo-users"
 cognito_domain_prefix  = "deaf-lingo-auth-unique-prefix"
-cognito_callback_urls  = ["http://localhost:5173"]
-cognito_logout_urls    = ["http://localhost:5173"]

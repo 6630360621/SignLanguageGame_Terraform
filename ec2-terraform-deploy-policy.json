@@ -14,12 +14,6 @@
           "Resource": "*"
         },
         {
-          "Sid": "ECRFullAccess",
-          "Effect": "Allow",
-          "Action": "ecr:*",
-          "Resource": "*"
-        },
-        {
           "Sid": "RDSFullAccess",
           "Effect": "Allow",
           "Action": "rds:*",
@@ -44,28 +38,22 @@
           "Resource": "*"
         },
         {
+          "Sid": "AmplifyFullAccess",
+          "Effect": "Allow",
+          "Action": "amplify:*",
+          "Resource": "*"
+        },
+        {
           "Sid": "IamMinimumForTerraformEcs",
           "Effect": "Allow",
           "Action": [
             "iam:CreateRole",
             "iam:DeleteRole",
             "iam:GetRole",
-            "iam:GetPolicy",
-            "iam:GetPolicyVersion",
             "iam:AttachRolePolicy",
             "iam:DetachRolePolicy",
             "iam:CreateServiceLinkedRole",
-            "iam:SimulatePrincipalPolicy",
-            "iam:ListAttachedRolePolicies",
-            "iam:ListRolePolicies",
-            "iam:ListRoles",
-            "iam:ListInstanceProfilesForRole",
-            "iam:CreateInstanceProfile",
-            "iam:DeleteInstanceProfile",
-            "iam:GetInstanceProfile",
-            "iam:AddRoleToInstanceProfile",
-            "iam:RemoveRoleFromInstanceProfile",
-            "iam:ListInstanceProfiles"
+            "iam:ListRoles"
           ],
           "Resource": "*"
         },
@@ -77,17 +65,6 @@
           "Condition": {
             "StringEquals": {
               "iam:PassedToService": "ecs-tasks.amazonaws.com"
-            }
-          }
-        },
-        {
-          "Sid": "IamPassRoleToEc2Only",
-          "Effect": "Allow",
-          "Action": "iam:PassRole",
-          "Resource": "*",
-          "Condition": {
-            "StringEquals": {
-              "iam:PassedToService": "ec2.amazonaws.com"
             }
           }
         }
