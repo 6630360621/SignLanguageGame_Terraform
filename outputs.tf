@@ -32,3 +32,13 @@ output "cognito_hosted_ui_base" {
   description = "Cognito Hosted UI base domain"
   value       = "https://${aws_cognito_user_pool_domain.frontend_domain.domain}.auth.${var.aws_region}.amazoncognito.com"
 }
+
+output "frontend_artifact_bucket" {
+  description = "S3 bucket where frontend build artifacts are uploaded"
+  value       = aws_s3_bucket.frontend_artifacts.bucket
+}
+
+output "frontend_artifact_object_key" {
+  description = "S3 object key EC2 deploy script expects"
+  value       = var.frontend_artifact_object_key
+}

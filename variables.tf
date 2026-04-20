@@ -52,6 +52,30 @@ variable "frontend_ssh_public_key" {
   default     = ""
 }
 
+variable "frontend_artifact_bucket_name" {
+  description = "Optional existing or desired S3 bucket name for frontend artifacts. Leave empty to auto-generate"
+  type        = string
+  default     = ""
+}
+
+variable "frontend_artifact_object_key" {
+  description = "S3 object key for the frontend zip artifact"
+  type        = string
+  default     = "frontend/latest.zip"
+}
+
+variable "frontend_artifact_bucket_force_destroy" {
+  description = "Allow deleting non-empty artifact bucket on terraform destroy"
+  type        = bool
+  default     = false
+}
+
+variable "frontend_auto_deploy_on_boot" {
+  description = "Attempt an artifact deploy during EC2 boot"
+  type        = bool
+  default     = false
+}
+
 variable "cognito_user_pool_name" {
   description = "Cognito User Pool name"
   type        = string

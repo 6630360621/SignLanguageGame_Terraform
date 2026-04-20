@@ -101,8 +101,37 @@ resource "aws_instance" "frontend" {
               #!/bin/bash
               set -euxo pipefail
               dnf update -y
-              dnf install -y nginx
+              dnf install -y nginx awscli unzip rsync
               systemctl enable nginx
+              mkdir -p /opt/frontend
+              cat > /opt/frontend/deploy-frontend.sh << 'SCRIPT'
+              #!/bin/bash
+              set -euo pipefail
+
+              ARTIFACT_BUCKET="${local.frontend_artifact_bucket_name}"
+              ARTIFACT_KEY="${var.frontend_artifact_object_key}"
+              ARTIFACT_ZIP="/tmp/frontend-artifact.zip"
+              STAGE_DIR="/tmp/frontend-dist"
+              TARGET_DIR="/usr/share/nginx/html"
+
+              rm -rf "$STAGE_DIR"
+              mkdir -p "$STAGE_DIR"
+
+              aws s3 cp "s3://$ARTIFACT_BUCKET/$ARTIFACT_KEY" "$ARTIFACT_ZIP"
+              unzip -o "$ARTIFACT_ZIP" -d "$STAGE_DIR"
+
+              # Support either zip root files or a nested dist/ directory.
+              if [ -d "$STAGE_DIR/dist" ]; then
+                rsync -a --delete "$STAGE_DIR/dist/" "$TARGET_DIR/"
+              else
+                rsync -a --delete "$STAGE_DIR/" "$TARGET_DIR/"
+              fi
+
+              chown -R nginx:nginx "$TARGET_DIR"
+              nginx -t
+              systemctl reload nginx
+              SCRIPT
+              chmod +x /opt/frontend/deploy-frontend.sh
               cat > /usr/share/nginx/html/index.html << 'HTML'
               <!doctype html>
               <html>
@@ -121,6 +150,9 @@ resource "aws_instance" "frontend" {
               </html>
               HTML
               systemctl restart nginx
+              if [ "${var.frontend_auto_deploy_on_boot}" = "true" ]; then
+                /opt/frontend/deploy-frontend.sh || true
+              fi
               EOF
 
   tags = {
