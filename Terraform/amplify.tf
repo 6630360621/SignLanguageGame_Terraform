@@ -48,12 +48,6 @@ resource "aws_amplify_app" "frontend" {
   }
 
   custom_rule {
-    source = "/api/<*>"
-    status = "200"
-    target = "http://${aws_lb.app.dns_name}/<*>"
-  }
-
-  custom_rule {
     source = "</^[^.]+$|\\.(?!(css|gif|ico|jpg|js|png|txt|svg|woff|ttf|map|json)$)([^.]+$)/>"
     status = "200"
     target = "/index.html"

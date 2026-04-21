@@ -38,6 +38,6 @@ resource "aws_cognito_user_pool_client" "frontend_app" {
 }
 
 resource "aws_cognito_user_pool_domain" "frontend_domain" {
-  domain       = var.cognito_domain_prefix
+  domain       = lower(var.cognito_domain_prefix)
   user_pool_id = aws_cognito_user_pool.frontend_users.id
 }
