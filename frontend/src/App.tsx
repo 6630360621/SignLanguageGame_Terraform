@@ -45,7 +45,7 @@ const TOTAL_TIME = 30;
 const LETTERS_PER_GAME = 5;
 const SCORE_PER_CORRECT = 10;
 const MAX_LIVES = 3;
-const DETECTION_INTERVAL_MS = 7000;
+const DETECTION_INTERVAL_MS = 2500;
 
 function generateWordList(): string[] {
   const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');

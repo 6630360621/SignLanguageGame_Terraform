@@ -5,19 +5,14 @@ import base64
 import io
 
 model_name = "prithivMLmods/Alphabet-Sign-Language-Detection"
-
-model = None
-processor = None
+model = SiglipForImageClassification.from_pretrained(model_name)
+processor = AutoImageProcessor.from_pretrained(model_name)
+model.eval()
 
 labels = {str(i): chr(65 + i) for i in range(26)}
 
 
 def predict_sign(image_input):
-    global model, processor
-    if model is None or processor is None:
-        model = SiglipForImageClassification.from_pretrained(model_name)
-        processor = AutoImageProcessor.from_pretrained(model_name)
-
     if isinstance(image_input, str):
         # base64 data URI (e.g. "data:image/jpeg;base64,...") or raw base64
         if "," in image_input:
@@ -30,7 +25,7 @@ def predict_sign(image_input):
 
     inputs = processor(images=image, return_tensors="pt")
 
-    with torch.no_grad():
+    with torch.inference_mode():
         outputs = model(**inputs)
         probs = torch.nn.functional.softmax(outputs.logits, dim=1)
 
