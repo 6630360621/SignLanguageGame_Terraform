@@ -4,11 +4,6 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
-variable "alb_certificate_arn" {
-  description = "ACM certificate ARN used by the ALB HTTPS listener"
-  type        = string
-}
-
 variable "db_password" {
   description = "Database password"
   type        = string

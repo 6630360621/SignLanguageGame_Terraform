@@ -79,27 +79,40 @@ resource "aws_lb_listener" "http" {
   protocol          = "HTTP"
 
   default_action {
-    type = "redirect"
-
-    redirect {
-      port        = "443"
-      protocol    = "HTTPS"
-      status_code = "HTTP_301"
-    }
-  }
-}
-
-resource "aws_lb_listener" "https" {
-  load_balancer_arn = aws_lb.app.arn
-  port              = 443
-  protocol          = "HTTPS"
-  ssl_policy        = "ELBSecurityPolicy-2016-08"
-  certificate_arn   = var.alb_certificate_arn
-
-  default_action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.app.arn
   }
+}
+
+resource "aws_apigatewayv2_api" "backend" {
+  name          = "leaderboard-backend-http-api"
+  protocol_type = "HTTP"
+}
+
+resource "aws_apigatewayv2_integration" "backend_proxy" {
+  api_id                 = aws_apigatewayv2_api.backend.id
+  integration_type       = "HTTP_PROXY"
+  integration_method     = "ANY"
+  payload_format_version = "1.0"
+  integration_uri        = "http://${aws_lb.app.dns_name}/{proxy}"
+}
+
+resource "aws_apigatewayv2_route" "backend_root" {
+  api_id    = aws_apigatewayv2_api.backend.id
+  route_key = "ANY /"
+  target    = "integrations/${aws_apigatewayv2_integration.backend_proxy.id}"
+}
+
+resource "aws_apigatewayv2_route" "backend_proxy" {
+  api_id    = aws_apigatewayv2_api.backend.id
+  route_key = "ANY /{proxy+}"
+  target    = "integrations/${aws_apigatewayv2_integration.backend_proxy.id}"
+}
+
+resource "aws_apigatewayv2_stage" "backend" {
+  api_id      = aws_apigatewayv2_api.backend.id
+  name        = "$default"
+  auto_deploy = true
 }
 
 # The "Server"
@@ -164,5 +177,5 @@ resource "aws_ecs_service" "app_service" {
     security_groups  = [aws_security_group.ecs_sg.id]
   }
 
-  depends_on = [aws_lb_listener.http, aws_lb_listener.https]
+  depends_on = [aws_lb_listener.http]
 }
