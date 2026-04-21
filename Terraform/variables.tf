@@ -88,3 +88,9 @@ variable "cognito_logout_urls" {
   type        = list(string)
   default     = ["http://localhost:5173"]
 }
+
+variable "api_cors_allowed_origins" {
+  description = "Allowed CORS origins for API Gateway (set Amplify frontend URL after first apply)"
+  type        = list(string)
+  default     = ["http://localhost:5173"]
+}

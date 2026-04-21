@@ -90,9 +90,9 @@ resource "aws_apigatewayv2_api" "backend" {
 
   cors_configuration {
     allow_credentials = false
-    allow_headers      = ["*"]
-    allow_methods      = ["OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE"]
-    allow_origins      = ["https://amplify.dx9aauqpvr73q.amplifyapp.com", "http://localhost:5173"]
+    allow_headers     = ["*"]
+    allow_methods     = ["OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE"]
+    allow_origins     = var.api_cors_allowed_origins
   }
 }
 
