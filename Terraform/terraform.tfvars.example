@@ -4,18 +4,18 @@ aws_region  = "us-east-1"
 db_password = "ChangeMe123!"
 image_uri   = "the link"
 
-amplify_project_name = "Cloud-Sign-language"
+amplify_project_name = "Cloud-Sign-Language"
 
 # Amplify frontend hosting
-amplify_app_name    = "deaf-lingo-frontend"
+amplify_app_name    = "Cloud-Sign-Language-frontend"
 amplify_repository  = "https://github.com/<your-org>/<your-repo>"
+
 # Recommended: store token in Secrets Manager and reference it here.
-amplify_access_token_secret_name = "deaf-lingo/amplify/github-token"
-# Optional fallback (not recommended for shared repos):
-# amplify_access_token = "github_pat_or_personal_access_token"
+amplify_access_token_secret_name = "Cloud-Sign-Language/amplify/github-token"
 amplify_branch_name = "main"
 amplify_app_root    = "frontend"
+amplify_instance_type = "t2.micro"
 
 # Cognito
-cognito_user_pool_name = "deaf-lingo-users"
-cognito_domain_prefix  = "deaf-lingo-auth-unique-prefix"
+cognito_user_pool_name = "Cloud-Sign-Language-users"
+cognito_domain_prefix  = "Cloud-Sign-Language-auth-unique-prefix"
