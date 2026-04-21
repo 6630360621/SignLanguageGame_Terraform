@@ -87,6 +87,13 @@ resource "aws_lb_listener" "http" {
 resource "aws_apigatewayv2_api" "backend" {
   name          = "leaderboard-backend-http-api"
   protocol_type = "HTTP"
+
+  cors_configuration {
+    allow_credentials = false
+    allow_headers      = ["*"]
+    allow_methods      = ["OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE"]
+    allow_origins      = ["https://amplify.dx9aauqpvr73q.amplifyapp.com", "http://localhost:5173"]
+  }
 }
 
 resource "aws_apigatewayv2_integration" "backend_proxy" {
@@ -95,12 +102,6 @@ resource "aws_apigatewayv2_integration" "backend_proxy" {
   integration_method     = "ANY"
   payload_format_version = "1.0"
   integration_uri        = "http://${aws_lb.app.dns_name}/{proxy}"
-}
-
-resource "aws_apigatewayv2_route" "backend_root" {
-  api_id    = aws_apigatewayv2_api.backend.id
-  route_key = "ANY /"
-  target    = "integrations/${aws_apigatewayv2_integration.backend_proxy.id}"
 }
 
 resource "aws_apigatewayv2_route" "backend_proxy" {
@@ -125,8 +126,8 @@ resource "aws_ecs_task_definition" "app_task" {
   family                   = "backend-task"
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
-  cpu                      = "256"
-  memory                   = "512"
+  cpu                      = "1024"
+  memory                   = "2048"
   execution_role_arn       = aws_iam_role.ecs_execution_role.arn
 
   container_definitions = jsonencode([
@@ -164,6 +165,7 @@ resource "aws_ecs_service" "app_service" {
   task_definition = aws_ecs_task_definition.app_task.arn
   desired_count   = 1
   launch_type     = "FARGATE"
+  health_check_grace_period_seconds = 300
 
   load_balancer {
     target_group_arn = aws_lb_target_group.app.arn

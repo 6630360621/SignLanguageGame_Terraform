@@ -44,6 +44,12 @@
           "Resource": "*"
         },
         {
+          "Sid": "ApiGatewayFullAccess",
+          "Effect": "Allow",
+          "Action": "apigateway:*",
+          "Resource": "*"
+        },
+        {
           "Sid": "SecretsManagerReadForAmplifyToken",
           "Effect": "Allow",
           "Action": [

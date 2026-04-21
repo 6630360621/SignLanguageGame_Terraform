@@ -45,6 +45,7 @@ const TOTAL_TIME = 30;
 const LETTERS_PER_GAME = 5;
 const SCORE_PER_CORRECT = 10;
 const MAX_LIVES = 3;
+const DETECTION_INTERVAL_MS = 7000;
 
 function generateWordList(): string[] {
   const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
@@ -337,12 +338,13 @@ function GameView({ onQuit }: GameViewProps) {
     }, 1500);
   };
 
-  // Real-time sign detection - polls backend every 2.5 s
+  // Real-time sign detection - polls backend less aggressively to avoid overloading the backend
   useEffect(() => {
     if (gameState !== 'playing' || cameraError) return;
     let isChecking = false;
 
     const intervalId = setInterval(async () => {
+      if (document.hidden) return;
       if (
         isChecking ||
         !videoRef.current ||
@@ -378,7 +380,7 @@ function GameView({ onQuit }: GameViewProps) {
         }
       }
       isChecking = false;
-    }, 2500);
+    }, DETECTION_INTERVAL_MS);
 
     return () => clearInterval(intervalId);
   }, [gameState, cameraError, wordList]); // eslint-disable-line react-hooks/exhaustive-deps
