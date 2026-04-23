@@ -129,7 +129,7 @@ The backend must be containerized and pushed to Amazon ECR in the same region yo
 #### Create an ECR repository
 
 ```bash
-aws ecr create-repository --repository-name <your-backend-repository-name> --region <your-region>
+aws ecr create-repository --repository-name my-leaderboard-backend --region us-east-1
 ```
 
 #### Create an IAM role or user with ECR push permissions
@@ -156,7 +156,7 @@ Create a policy with the following JSON and attach it to an IAM user or role:
                 "ecr:PutImage",
                 "ecr:UploadLayerPart"
             ],
-            "Resource": "arn:aws:ecr:<your-region>:<account-id>:repository/<your-backend-repository-name>"
+            "Resource": "arn:aws:ecr:us-east-1:<account-id>:repository/my-leaderboard-backend"
         }
     ]
 }
@@ -168,16 +168,16 @@ Log in to AWS CLI using the user or role created above, then run:
 
 ```bash
 # Authenticate Docker to ECR
-aws ecr get-login-password --region <your-region> \
+aws ecr get-login-password --region us-east-1 \
     | docker login --username AWS \
-        --password-stdin <account-id>.dkr.ecr.<your-region>.amazonaws.com
+        --password-stdin <account-id>.dkr.ecr.us-east-1.amazonaws.com
 
 # Build and push
 cd backend
-docker build -t <your-backend-repository-name> .
-docker tag <your-backend-repository-name>:latest \
-    <account-id>.dkr.ecr.<your-region>.amazonaws.com/<your-backend-repository-name>:latest
-docker push <account-id>.dkr.ecr.<your-region>.amazonaws.com/<your-backend-repository-name>:latest
+docker build -t my-leaderboard-backend .
+docker tag my-leaderboard-backend:latest \
+    <account-id>.dkr.ecr.us-east-1.amazonaws.com/my-leaderboard-backend:latest
+docker push <account-id>.dkr.ecr.us-east-1.amazonaws.com/my-leaderboard-backend:latest
 ```
 
 Note the full image URI, because you will need it as `image_uri` in `terraform.tfvars`.
